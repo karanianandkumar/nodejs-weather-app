@@ -21,5 +21,13 @@ request({
     url:`https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`,
     json:true
 },(error,response,body)=>{
-    console.log(body.results[0].geometry.location);
+    if(error){
+        console.log('Unable to connect to Google Servers');
+    }else if(body.status==='ZERO_RESULTS'){
+        console.log(`Unable to a location for ${argv} address`);
+    }else if(body.status==='OVER_QUERY_LIMIT'){
+        console.log('OVER QUERY LIMIT ERROR.')
+    }else if(body.status==='OK'){
+        console.log(body.results[0].geometry.location);
+    }
 });
