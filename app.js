@@ -14,8 +14,11 @@ const argv=yargs
     .help()
     .alias('help','h')
     .argv;
+
+var encodedAddress=encodeURIComponent(argv);
+
 request({
-    url:'https://maps.googleapis.com/maps/api/geocode/json?address=IAAA%20technologies',
+    url:'https://maps.googleapis.com/maps/api/geocode/json?address='+encodedAddress,
     json:true
 },(error,response,body)=>{
     console.log(body.results[0].geometry.location);
