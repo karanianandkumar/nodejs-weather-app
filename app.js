@@ -1,25 +1,33 @@
 
-const yargs=require('yargs');
+const yargs = require('yargs');
 
-const geocode=require('./geocode/geocode');
+const geocode = require('./geocode/geocode');
+const weather = require('./weather/weather');
 
-const argv=yargs
+const argv = yargs
     .options({
-        a:{
-            demand:true,
-            alias:'address',
-            describe:'Address to fetch weather For',
-            string:true //to make sure get data from cmd
+        a: {
+            demand: true,
+            alias: 'address',
+            describe: 'Address to fetch weather For',
+            string: true //to make sure get data from cmd
         }
     })
     .help()
-    .alias('help','h')
+    .alias('help', 'h')
     .argv;
 
-geocode.geocodeAddress(argv.address,(errorMessage,results)=>{
-    if(errorMessage){
+geocode.geocodeAddress(argv.address, (errorMessage, results) => {
+    if (errorMessage) {
         console.log(errorMessage);
-    }else{
-        console.log(JSON.stringify(results,undefined,2));
+    } else {
+        //console.log(JSON.stringify(results, undefined, 2));
+        weather.getWeather(results.latitude, results.longitude, (errorMessage, weatherResult) => {
+            if (errorMessage) {
+                console.log(errorMessage);
+            } else {
+                console.log(`Current Temperature is ${weatherResult.temperature}`);
+            }
+        })
     }
 });
